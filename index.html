@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.3/jquery.min.js"></script>
+
+	<script src="dist/jquery.nstSlider.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.0.0-beta.2/leaflet.js"></script>
+	<script src="dist/leaflet.spin.js"></script>
+	<script src="dist/spin.js"></script>
+	<script src="dist/multiple-select.js"></script>
+	<script src="dist/leaflet.label.js"></script>
+	<script src="dist/pnetDecodes.js"></script>
+	<script src="dist/newpnetPROCESSED.js"></script>
+	<!--my helper file for decoding the string mappings-->
+	<script src="dist/leaflet-heat.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"
+		integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS"
+		crossorigin="anonymous"></script>
+	<script src="dist/leaflet.markercluster1.js"></script>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"
+		integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css"
+		integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
+	<link rel="stylesheet" href="dist/leaflet.css" />
+	<link type="text/css" rel="stylesheet" href="dist/jquery.nstSlider.css">
+	<link rel="stylesheet" href="dist/leaflet.label.css" />
+	<link rel="stylesheet" href="dist/MarkerCluster.css" />
+	<link rel="stylesheet" href="dist/MarkerCluster.Default.css" />
+	<link href="dist/multiple-select.css" rel="stylesheet" />
+
+	<link rel="stylesheet" href="dist/screen.css" />
+	<style>
+		.mycluster {
+			width: 40px;
+			height: 40px;
+			opacity: 1.0;
+
+		}
+
+		.leaflet-label {
+			z-index: 0;
+		}
+
+		.tooltip {
+			margin: 8px;
+			padding: 8px;
+			border: 1px solid blue;
+			background-color: yellow;
+			position: absolute;
+			z-index: 700;
+		}
+	</style>
+	<title>ParrotNet Map</title>
+</head>
+
+<body>
+
+	<div id="progress">
+		<div id="progress-bar"></div>
+	</div>
+
+	<!--<div class="row">
+				<div class="col-xs-2">
+			 	<button id="getSelectsBtn">Filter</button>
+				</div>
+				<div class="col-xs-2">
+			 	
+				</div>
+				<div class="col-xs-8">
+					<div class="filtBtn">
+					<button style="float: right;" id="fltTimelineBtn">Filter Timeline</button>
+					</div>
+				</div>
+			</div>-->
+	<div class="row pnet-menu">
+		<div class="col-xs-2">
+			<div id="SpeciesDiv">
+				<select id="Species" name="Species" multiple="multiple">
+					<option value="0">Psittacula krameri</option>
+					<option value="1">Ara macao</option>
+					<option value="2">Aratinga acuticaudata</option>
+					<option value="3">Melopsittacus undulatus</option>
+					<option value="4">Myiopsitta monachus</option>
+					<option value="5">Nymphicus hollandicus</option>
+					<option value="6">Platycercus adscitusi</option>
+					<option value="7">Platycercus eximius</option>
+				</select>
+				<script>
+					$("select").multipleSelect({
+						isOpen: true,
+						keepOpen: true,
+						placeholder: "Species",
+						width: "100%"
+
+					});
+					$('select').multipleSelect('checkAll');
+				</script>
+			</div>
+		</div>
+		<div class="col-xs-2">
+			<div id="DBDiv">
+				<select id="sourceDB" name="sourceDB" multiple="multiple">
+					<option value="0">BTO_BirdTrack</option>
+					<option value="1">BTO_Breeding Bird Survey</option>
+					<option value="2">BTO_Garden BirdWatch</option>
+					<option value="3">BTO_Ringing Scheme</option>
+					<option value="4">BTO_Waterways Breeding Bird Survey</option>
+					<option value="5">eBird</option>
+					<option value="6">GBIF</option>
+					<option value="7">PC</option>
+					<option value="8">Sovon</option>
+					<option value="9">Random Observation</option>
+					<option value="10">Roost</option>
+					<option value="11">Krameri_Spain</option>
+					<option value="12">SPN-MNHN FCHIRON</option>
+					<option value="13">EMC France(clergeau)</option>
+				</select>
+				<script>
+					$("select").multipleSelect({
+						isOpen: true,
+						keepOpen: true,
+						placeholder: "Data Source",
+						width: "100%"
+					});
+				</script>
+			</div>
+		</div>
+		<div class="col-xs-2">
+			<div id="CountDiv">
+				<select id="country" name="country" multiple="multiple">
+					<option value="0">UK</option>
+					<option value="1">Austria</option>
+					<option value="2">Belgium</option>
+					<option value="3">Denmark</option>
+					<option value="4">Finland</option>
+					<option value="5">France</option>
+					<option value="6">Germany</option>
+					<option value="7">Greece</option>
+					<option value="8">Ireland</option>
+					<option value="9">Israel</option>
+					<option value="10">Italy</option>
+					<option value="11">Netherlands</option>
+					<option value="12">Poland</option>
+					<option value="13">Portugal</option>
+					<option value="14">Spain</option>
+					<option value="15">Sweden</option>
+					<option value="16">Turkey</option>
+					<option value="17">Vatican City (Holy See)</option>
+				</select>
+				<script>
+					$("select").multipleSelect({
+						isOpen: true,
+						keepOpen: true,
+						placeholder: "Country",
+						width: "100%"
+					});
+				</script>
+			</div>
+		</div>
+		<div class="col-xs-2">
+			<select id="occurance" name="occurance" multiple="multiple">
+				<option value="1">1+</option>
+				<option value="2">2+</option>
+				<option value="5">5+</option>
+				<option value="3">10+</option>
+			</select>
+
+			<script>
+				$("select").multipleSelect({
+					isOpen: true,
+					keepOpen: true,
+					placeholder: "Sightings",
+					width: "100%"
+				});
+			</script>
+		</div>
+
+		<div class="col-xs-1">
+			<button id="getSelectsBtn" class="filterBtn">Filter</button>
+		</div>
+		<div class="col-xs-3">
+			<div class="nstSlider" data-range_min="1905" data-range_max="2015" data-cur_min="80" data-cur_max="0">
+				<div class="leftGrip"></div>
+			</div>
+			<div class="leftLabel"></div>
+
+
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-12">
+			<div id="map"></div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-sm-2">
+			<img class="iconKey" src="microicons/marker-icon-11.png" />
+			<p class="iconKey">Agapornis<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;roseicollis</p>
+		</div>
+		<div class="col-sm-2">
+			<img class="iconKey" src="microicons/marker-icon-5.png" />
+			<p class="iconKey">Nymphicus<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;hollandicus</p>
+		</div>
+		<div class="col-sm-2">
+			<img class="iconKey" src="microicons/marker-icon-6.png" />
+			<p class="iconKey">Platycercus<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;adscitus</p>
+		</div>
+		<div class="col-sm-2">
+			<img class="iconKey" src="microicons/marker-icon-7.png" />
+			<p class="iconKey">Platycercus<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;eximius</p>
+		</div>
+		<div class="col-sm-2">
+			<img class="iconKey" src="microicons/marker-icon-0.png" />
+			<p class="iconKey">Psittacula<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;krameri</p>
+		</div>
+		<div class="col-sm-2">
+			<img class="iconKey" src="microicons/marker-icon-3.png" />
+			<p class="iconKey">Melopsittacus <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;undulatus</p>
+		</div>
+		<div class="col-sm-2">
+			<img class="iconKey" src="microicons/marker-icon-8.png" />
+			<p class="iconKey">Poicephalus<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;senegalus</p>
+		</div>
+		<div class="col-sm-2">
+			<img class="iconKey" src="microicons/marker-icon-2.png" />
+			<p class="iconKey">Aratinga<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;acuticaudata</p>
+		</div>
+		<div class="col-sm-2">
+			<img class="iconKey" src="microicons/marker-icon-9.png" />
+			<p class="iconKey">Polytelis<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;alexandrae</p>
+		</div>
+		<div class="col-sm-2">
+			<img class="iconKey" src="microicons/marker-icon-10.png" />
+			<p class="iconKey">Psittacula<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;eupatria</p>
+		</div>
+		<div class="col-sm-2">
+			<img class="iconKey" src="microicons/marker-icon-4.png" />
+			<p class="iconKey">Myiopsitta<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;monachus</p>
+		</div>
+		<div class="col-sm-2">
+			<img class="iconKey" src="microicons/marker-icon-1.png" />
+			<p class="iconKey">Ara <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;macao</p>
+		</div>
+		<div class="col-sm-2">
+			<img class="iconKey" src="microicons/marker-icon-12.png" />
+			<p class="iconKey">Ara <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ararauna</p>
+		</div>
+		<div class="col-sm-2">
+			<img class="iconKey" src="microicons/marker-icon-13.png" />
+			<p class="iconKey">Amazona <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;amazonica</p>
+		</div>
+		<div class="col-sm-2">
+			<img class="iconKey" src="microicons/marker-icon-14.png" />
+			<p class="iconKey">Aratinga <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;holochlora</p>
+		</div>
+		<div class="col-sm-2">
+			<img class="iconKey" src="microicons/marker-icon-15.png" />
+			<p class="iconKey">Cacatua <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;galerita</p>
+		</div>
+		<div class="col-sm-2">
+			<img class="iconKey" src="microicons/marker-icon-16.png" />
+			<p class="iconKey">Nandayus <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;nenday</p>
+		</div>
+		<div class="col-sm-2">
+			<img class="iconKey" src="microicons/marker-icon-17.png" />
+			<p class="iconKey">Orthopsittaca <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;manilata</p>
+		</div>
+
+	</div>
+
+
+	<!--- I ADDED THIS -->
+
+
+
+	<script>
+		$(function () {
+			$('[data-toggle="tooltip"]').tooltip()
+		})
+		var newslidervalue;
+ 			var markers = L.markerClusterGroup({ chunkedLoading: true, chunkProgress: updateProgressBar, zoomToBoundsOnClick: false, removeOutsideVisibleBounds: true, maxClusterRadius: 45 });
+		var heatMap = L.markerClusterGroup({
+			iconCreateFunction: function (cluster) {
+				var childCount = cluster.getChildCount()
+
+				return new L.DivIcon({
+
+					className: 'mycluster',
+					iconSize: [10, 10],
+					iconAnchor: [0, 0]
+				});
+			}, chunkedLoading: true, chunkProgress: updateProgressBar, removeOutsideVisibleBounds: true, maxClusterRadius: 11, singleMarkerMode: true, spiderfyOnMaxZoom: false
+		});
+		var progress = document.getElementById('progress');
+		var progressBar = document.getElementById('progress-bar');
+		var list = [];
+		var markerList = [];
+		var heatMapList = [];
+		var latlist = [];
+		var longlist = [];
+		var speciesArr = [];
+		var sourceDBArr = [];
+		var stateArr = [];
+		var occValArr = [];
+		var heatMapArr = [];
+
+		//var heat = L.heatLayer();
+		var heatLayerGroup = L.layerGroup();
+
+		var firstTime = true;
+		var loopcnt = 0;
+		var progcnt = 0;
+		var latMin, latMax, longMin, longMax;
+		var fixBounds = false;
+		var southWest = L.latLng(26.7, -18.8);
+		var northEast = L.latLng(63, 39.7);
+		var bounds = L.latLngBounds(southWest, northEast);
+ 			var spinner = null;
+		var sliderVal = 1905;
+		var heat;
+		var tiles = L.tileLayer("https://maptiles.kent.ac.uk/tiles/{z}/{x}/{y}.png", {
+			maxZoom: 18,
+			attribution: ''
+		}),
+			latlng = L.latLng(50.191, -0.6447);
+		var map = L.map('map', { center: latlng, zoom: 5, maxZoom: 18, layers: [tiles] });
+		control = L.control.layers(null, null, { collapsed: true });
+		control.addOverlay(markers, 'Species Markers');
+
+		control.addTo(map);
+
+
+		markers.on('clusterclick', function (a) {
+			a.layer.zoomToBounds();
+		});
+
+
+		heatMap.on('clustermouseover', function (e) {
+			var tmp = e.layer.getChildCount();
+			var heatCnt = 0;
+			var heatNum = 0;
+			var heatNumTmp = 0;
+			var labelString;
+			var label = e.layer.getLabel();
+			var clusterMarkers = e.layer.getAllChildMarkers();
+			for (x = 0; x < clusterMarkers.length; x++) {
+				heatNumTmp = parseInt(clusterMarkers[x].label._content.substr(9).trim());
+				heatNum += parseInt(clusterMarkers[x].label._content.substr(9).trim());
+			}
+			labelString = "Density: " + heatNum;
+			if (!label) {
+
+				e.layer.bindLabel(labelString, { className: 'map-label', offset: [10, -15], pane: 'popupPane' });
+				e.layer.showLabel();
+				e.layer.options.riseOnHover = true
+				var label = e.layer.getLabel();
+			}
+			else
+				e.layer.updateLabelContent(labelString);
+		});
+
+		heatMap.on('clustermouseout', function (a) {
+			console.log('iout cluster overclay mouseover ' + a.layer.getChildCount());
+			hideTooltip(a);
+		});
+		map.on('overlayadd', onOverlayAdd);
+		map.on('overlayremove', onOverlayRemove);
+
+		function onOverlayAdd(e) {
+			console.log(e);
+		}
+
+
+		map.on('zoomend', function (e) {
+			console.log("Zoom level is: " + e.target._zoom);
+		});
+
+		function onOverlayRemove(e) {
+			console.log(e);
+		}
+		heatMap.on('mouseover', function (e) {
+			console.log('mouse over marker now');
+			var label = e.layer.getLabel();
+			var labelString = "Density: 1";
+			if (!label)
+				e.layer.bindLabel(labelString, { opacity: 1 });
+			else
+				e.layer.updateLabelContent(labelString);
+		});
+
+		heatMap.on('mouseovot', function (a) {
+			console.log('mouse OUT marker now');
+		});
+
+		heatLayerGroup.on('mouseover', function (a) {
+			console.log('in heatgroup overclay mouseover');
+		});
+
+		$(document).ready(function () {
+			speciesArr = getSelectValues(Species);
+			getResource(true, null);
+		});
+
+		$("#fltTimelineBtn").click(function () {
+			//clear the filters sort map
+			markers.clearLayers();
+			heatMap.clearLayers();
+			if (checkTimelineDateRange(sliderVal))
+				getResource(false, sliderVal);
+			else
+				window.alert('No records returned for the year selection');
+		});
+
+		$("#getSelectsBtn").click(function () {
+
+			markerList.length = 0;
+			heatMapList.length = 0;
+			console.log('Size of markerlist is ' + markerList.length);
+			processData = false;
+			fixBounds = false;
+			list.length = 0;
+			speciesArr.length = 0;
+			sourceDBArr.length = 0;
+			stateArr.length = 0;
+			occValArr.length = 0;
+			markerList.length = 0;
+			markers.clearLayers();
+			heatMap.clearLayers();
+			speciesArr = getSelectValues(Species);
+			sourceDBArr = getSelectValues(sourceDB);
+			stateArr = getSelectValues(country);
+			occValArr = getSelectValues(occurance);
+			if ((speciesArr.length != 0) || (sourceDBArr.length != 0) || (stateArr.length != 0) || (occValArr.length != 0)) {
+				getResource(true, null);
+			}
+			else {
+				map.fitBounds(bounds);
+			}
+		});
+
+		$('.nstSlider').nstSlider({
+			"left_grip_selector": ".leftGrip",
+			"highlight": {
+				"grip_class": "gripHighlighted",
+				"panel_selector": ".highlightPanel"
+			},
+
+			"user_mouseup_callback": function (vmin, vmax, left_grip_moved) {
+				markers.clearLayers();
+				if (checkTimelineDateRange(sliderVal)) {
+					markers.clearLayers();
+					heatMap.clearLayers();
+					getResource(false, sliderVal);
+
+
+				}
+				else
+					window.alert('No records returned for the year selection');
+			},
+			"value_changed_callback": function (cause, leftValue, rightValue) {
+
+				$('.leftLabel').text(leftValue);
+				$('.rightLabel').text(rightValue);
+				newslidervalue = leftValue;
+				sliderVal = leftValue;
+			},
+		})
+			.nstSlider('set_step_histogram', [
+				1,
+				1,
+				1,
+				1,
+				1,
+				1,
+				1,
+				1,
+				1,
+				1,
+				1,
+				1,
+				1,
+				1,
+				1,
+				1,
+				1,
+				1,
+				1,
+				1,
+				1,
+				1,
+				1,
+				1,
+				1,
+				1,
+				1,
+				1,
+				1,
+				1,
+				1,
+				1,
+				1,
+				1,
+				1,
+				1,
+				1,
+				1,
+				1,
+				1,
+				1,
+				1,
+				1,
+				1,
+				1,
+				1,
+				1,
+				1,
+				1000,
+				1000,
+				1000,
+				1000,
+				1000,
+				1000,
+				1000,
+				1000,
+				1000,
+				1000,
+				1000,
+				1000,
+				1000,
+				1000,
+				1000,
+				1000,
+				1000,
+				1000,
+				1000,
+				1000,
+				1000,
+				1000,
+				1000,
+				1000,
+				1000,
+				1000,
+				1000,
+				1000,
+				1000,
+				1000,
+				1000,
+				1000,
+				1000,
+				1000,
+				1000,
+				1000,
+				1000,
+				1000,
+				1000,
+				1000,
+				1000,
+				1000
+
+			]);
+
+
+		var changeTooltipPosition = function (event) {
+			var tooltipX = event.originalEvent.pageX - 8;
+			var tooltipY = event.originalEvent.pageY + 8;
+			$('div.tooltip').css({ top: tooltipY, left: tooltipX });
+		};
+
+		var showTooltip = function (event) {
+			$('div.tooltip').remove();
+			$('<div class="tooltip">I\' am tooltips! tooltips! tooltips! :)</div>')
+				.appendTo('body');
+			changeTooltipPosition(event);
+		};
+
+		var hideTooltip = function () {
+			$('div.tooltip').remove();
+		};
+
+	</script>
+</body>
+
+</html>
