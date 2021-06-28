@@ -1,0 +1,175 @@
+
+.leftGrip.nst-animating, {
+	height: 10px !important;
+	width: 10px !important;
+}
+
+.leftGrip{
+	height: 10px !important;
+	width: 10px !important;
+}
+.leftLabel {
+    
+    font-weight: bold;
+}
+#map {
+	width: 100%; 
+	height: 600px; 
+	border: 1px solid #ccc;
+	z-index: 1000;
+}
+
+#progress {
+    display: none;
+    position: absolute;
+    z-index: 1001;
+    left: 35%;
+    top: 40%;
+    right: 50%;
+    width: 275px;
+    height: 28px;
+    background-color: #fff;
+    background-color: rgba(255, 255, 255, 0.7);
+    border-radius: 4px;
+    padding: 2px;
+    margin:0 auto;
+}
+
+#progress-bar {
+    width: 0;
+    height: 100%;
+    background-color: #76A6FC;
+    border-radius: 4px;
+    z-index: 1001;
+}
+#spinner {
+			position: absolute;
+      margin:0 auto;
+      text-align:center;
+      top: 50%;
+    left: 50%;
+    margin-top: -50px;
+    margin-left: -50px;
+    width: 100px;
+    height: 100px;
+    }
+.col-xs-2, .col-xs-3, .col-xs-8, .col-xs-4
+{
+	z-index: 1001;
+	padding: 0px;
+}
+.nstSlider {
+	width: 100%;
+    border-radius:0;
+    margin-top:0px;
+    height: 10px;
+    
+ 
+}
+
+
+.col-md-12
+{
+	margin: 0px;
+	padding: 0px;
+}
+.filtBtn{
+	display: block;
+}
+.row{
+	width: 950px;
+	margin: 0px;
+	padding: 0px;
+	
+	
+}
+.leftLabel{
+    text-align:center;
+}
+#SpeciesDiv select { 
+ min-width:120px;
+ max-width:120px; 
+}
+
+#DBDiv select { 
+ min-width:120px;
+ max-width:120px; 
+}
+
+#CountDiv select { 
+ min-width:50px;
+ max-width:50px; 
+}
+
+.ms-drop{
+	width: auto;
+	max-height: 300px;
+}
+
+
+
+.pnet-menu{
+    position:absolute;
+    background:#ccc;
+    z-index:10000;
+    opacity:0.9;
+}
+
+.pnet-map-footer{
+    position:absolute;
+    background:#cccccc;
+    z-index:10000;
+    opacity:0.9;
+    height:40px;
+    width:100%;
+    bottom:0;
+}
+
+.leaflet-top{
+    top:50px;
+}
+.filterBtn{
+    background-color: #8e8e8e; 
+    border: none;
+    color: white;
+    padding: 0px 0px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    width:100%;
+    height: 26px;
+    -moz-border-radius: 8px;
+  	-webkit-border-radius: 8px;
+  	-webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+    border: solid 1px #3d3d3d;
+    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.4);
+    -webkit-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.4), 0 1px 1px rgba(0, 0, 0, 0.2);
+    -moz-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.4), 0 1px 1px rgba(0, 0, 0, 0.2);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.4), 0 1px 1px rgba(0, 0, 0, 0.2);
+}
+
+.filterBtn:hover{
+    background-color:#666666;
+    cursor:pointer;
+}
+.row.pnet-menu{
+	height: 26px;
+}
+
+.col-xs-1{
+	padding-right: 0px;
+  padding-left: 0px; 
+}
+
+.key{
+    margin:0 auto;
+    padding-top:10px;
+}
+
+.iconKey{
+    margin-right:5px;
+    display:inline;
+}
